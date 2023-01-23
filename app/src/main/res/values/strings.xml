@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">WeatherAppAssignment</string>
+    <string name="current_temperature"><b>%d&#x00B0;C</b></string>
+    <string name="max_temperature">Max <b>%d&#x00B0;C</b></string>
+    <string name="min_temperature">Min <b>%d&#x00B0;C</b></string>
+    <string name="refresh">Refresh</string>
 </resources>
