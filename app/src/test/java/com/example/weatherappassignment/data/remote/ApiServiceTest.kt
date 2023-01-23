@@ -1,9 +1,5 @@
-package com.example.weatherappassignment.data
+package com.example.weatherappassignment.data.remote
 
-import com.example.weatherappassignment.data.remote.ApiService
-import com.example.weatherappassignment.data.remote.Temperature
-import com.example.weatherappassignment.data.remote.WeatherConditions
-import com.example.weatherappassignment.data.remote.WeatherData
 import com.google.common.truth.Truth.assertThat
 import com.google.gson.Gson
 import kotlinx.coroutines.ExperimentalCoroutinesApi

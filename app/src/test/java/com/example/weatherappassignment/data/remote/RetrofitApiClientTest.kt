@@ -1,13 +1,7 @@
-package com.example.weatherappassignment.data
+package com.example.weatherappassignment.data.remote
 
 import com.example.weatherappassignment.BuildConfig
 import com.example.weatherappassignment.data.model.Weather
-import com.example.weatherappassignment.data.remote.ApiClient
-import com.example.weatherappassignment.data.remote.ApiService
-import com.example.weatherappassignment.data.remote.RetrofitApiClient
-import com.example.weatherappassignment.data.remote.Temperature
-import com.example.weatherappassignment.data.remote.WeatherConditions
-import com.example.weatherappassignment.data.remote.WeatherData
 import com.example.weatherappassignment.utils.METRIC
 import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.ExperimentalCoroutinesApi
