@@ -1,18 +1,132 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".view.MainActivity">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Hello World!"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <data>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <import type="android.view.View" />
+
+        <variable
+            name="vm"
+            type="com.example.weatherappassignment.view.MainViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/sky_blue">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/mainContentView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="@dimen/screen_margin_x"
+            android:layout_marginEnd="@dimen/screen_margin_x"
+            android:visibility="@{vm.state.shouldShowContentView() ? View.VISIBLE : View.GONE}">
+
+            <TextView
+                android:id="@+id/cityName"
+                style="@style/Highlighted"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{vm.state.city}"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.2" />
+
+            <TextView
+                android:id="@+id/currentTemperature"
+                style="@style/Normal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{vm.state.currentTemperature}"
+                android:textSize="50sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/cityName"
+                app:layout_constraintVertical_bias="0.1"
+                tools:text="5" />
+
+            <TextView
+                android:id="@+id/currentWeather"
+                style="@style/Normal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{vm.state.currentCondition}"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/currentTemperature"
+                app:layout_constraintVertical_bias="0.1" />
+
+            <TextView
+                android:id="@+id/minTemperature"
+                style="@style/Normal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/screen_margin_x"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="@dimen/screen_margin_x"
+                android:text="@{vm.state.minTemperature}"
+                app:layout_constraintEnd_toStartOf="@id/currentWeather"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/currentWeather"
+                tools:text="5" />
+
+            <TextView
+                android:id="@+id/maxTemperature"
+                style="@style/Normal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/screen_margin_x"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="@dimen/screen_margin_x"
+                android:text="@{vm.state.maxTemperature}"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/currentWeather"
+                app:layout_constraintTop_toBottomOf="@id/currentWeather"
+                tools:text="5" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <Button
+            android:id="@+id/refresh"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/screen_margin_x"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="@dimen/screen_margin_x"
+            android:layout_marginBottom="20dp"
+            android:onClick="@{() -> vm.onRefreshButtonClicked()}"
+            android:text="@string/refresh"
+            android:textAllCaps="false"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="@{vm.state.shouldShowErrorView() ? View.VISIBLE : View.GONE}">
+
+            <TextView
+                android:id="@+id/errorMessage"
+                style="@style/Normal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/screen_margin_x"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="@dimen/screen_margin_x"
+                android:text="@{vm.state.errorMessage}"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

@@ -1,13 +1,12 @@
-package view
+package com.example.weatherappassignment.view
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import com.example.weatherappassignment.view.MainViewModel
+import com.example.weatherappassignment.R
 import com.example.weatherappassignment.data.Repository
+import com.example.weatherappassignment.data.Result.Error
+import com.example.weatherappassignment.data.Result.Success
 import com.example.weatherappassignment.data.model.Weather
 import com.example.weatherappassignment.utils.ResourceProvider
-import com.example.weatherappassignment.R
-import com.example.weatherappassignment.data.Result.Success
-import com.example.weatherappassignment.data.Result.Error
 import com.example.weatherappassignment.view.MainViewModel.State
 import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.CoroutineScope
@@ -111,5 +110,41 @@ class MainViewModelTest {
 
         // Then
         assertThat(job.isCancelled).isTrue()
+    }
+
+    @Test
+    fun `state shouldShowContentView returns true when errorMessage is null`() {
+        // Given
+        val state = State()
+
+        // Then
+        assertThat(state.shouldShowContentView()).isTrue()
+    }
+
+    @Test
+    fun `state shouldShowContentView returns false when errorMessage is not null`() {
+        // Given
+        val state = State(errorMessage = "error")
+
+        // Then
+        assertThat(state.shouldShowContentView()).isFalse()
+    }
+
+    @Test
+    fun `state shouldShowErrorView returns false when errorMessage is null`() {
+        // Given
+        val state = State()
+
+        // Then
+        assertThat(state.shouldShowErrorView()).isFalse()
+    }
+
+    @Test
+    fun `state shouldShowErrorView returns true when errorMessage is not null`() {
+        // Given
+        val state = State(errorMessage = "error")
+
+        // Then
+        assertThat(state.shouldShowErrorView()).isTrue()
     }
 }

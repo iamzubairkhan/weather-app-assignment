@@ -27,7 +27,7 @@ class MainViewModel @Inject constructor(
 
     private val coroutineScope = CoroutineScope(uiCoroutineContext)
 
-    fun refreshData(location: String = "stockholm") {
+    fun refreshData(location: String = "Stockholm") {
         coroutineScope.launch {
             when (val result = repository.getCurrentWeather(location = location)) {
                 is Success -> {
@@ -52,6 +52,8 @@ class MainViewModel @Inject constructor(
         }
     }
 
+    fun onRefreshButtonClicked() = refreshData()
+
     data class State(
         val city: String? = null,
         val currentCondition: String? = null,
@@ -59,7 +61,10 @@ class MainViewModel @Inject constructor(
         val minTemperature: String? = null,
         val maxTemperature: String? = null,
         val errorMessage: String? = null
-    )
+    ) {
+        fun shouldShowContentView(): Boolean = errorMessage == null
+        fun shouldShowErrorView(): Boolean = errorMessage != null
+    }
 
     public override fun onCleared() {
         super.onCleared()
