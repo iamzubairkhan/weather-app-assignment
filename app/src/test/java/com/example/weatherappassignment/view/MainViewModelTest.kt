@@ -66,7 +66,7 @@ class MainViewModelTest {
         whenever(resourceProvider.getString(R.string.max_temperature, 30)).thenReturn("30°C")
 
         // When
-        viewModel.refreshData(location)
+        viewModel.getWeatherData(location)
 
         // Then
         val expectedState = State(
@@ -90,7 +90,7 @@ class MainViewModelTest {
         whenever(repository.getCurrentWeather(location)).thenReturn(Error(error))
 
         // When
-        viewModel.refreshData(location = location)
+        viewModel.getWeatherData(location = location)
 
         val state = viewModel.state.value
 

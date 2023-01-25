@@ -6,6 +6,7 @@ import com.example.weatherappassignment.data.Repository
 import com.example.weatherappassignment.data.Result.Success
 import com.example.weatherappassignment.data.Result.Error
 import com.example.weatherappassignment.utils.ResourceProvider
+import com.example.weatherappassignment.utils.capitalized
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.cancel
@@ -27,7 +28,22 @@ class MainViewModel @Inject constructor(
 
     private val coroutineScope = CoroutineScope(uiCoroutineContext)
 
-    fun refreshData(location: String = "Stockholm") {
+    fun refreshState() = _state.update {
+        it.copy(
+            city = null,
+            currentTemperature = null,
+            currentCondition = null,
+            minTemperature = null,
+            maxTemperature = null,
+            errorMessage = null
+        )
+    }
+
+    fun getWeatherData(location: String) {
+        if (location.isBlank()) {
+            _state.update { it.copy(errorMessage = "Error: Location cannot be empty") }
+            return
+        }
         coroutineScope.launch {
             when (val result = repository.getCurrentWeather(location = location)) {
                 is Success -> {
@@ -37,7 +53,7 @@ class MainViewModel @Inject constructor(
                         val maxTemperature = maxTemperature?.let { resourceProvider.getString(R.string.max_temperature, it) }
                         _state.update {
                             it.copy(
-                                city = cityName,
+                                city = cityName.capitalized(),
                                 currentCondition = condition,
                                 currentTemperature = currentTemperature,
                                 minTemperature = minTemperature,

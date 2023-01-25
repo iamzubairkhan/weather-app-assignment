@@ -5,4 +5,5 @@
     <string name="min_temperature">Min <b>%d&#x00B0;C</b></string>
     <string name="search">Search</string>
     <string name="enter_city_name">Enter City Name</string>
+    <string name="try_again">Try again</string>
 </resources>

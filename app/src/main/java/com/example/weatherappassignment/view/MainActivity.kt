@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.example.weatherappassignment.databinding.ActivityMainBinding
+import com.example.weatherappassignment.utils.hideKeyboard
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -22,7 +23,8 @@ class MainActivity : AppCompatActivity() {
         with(binding) {
             vm = viewModel
             searchButton.setOnClickListener {
-                viewModel.refreshData(enterCityName.text.toString())
+                it?.hideKeyboard(baseContext)
+                viewModel.getWeatherData(enterCityName.text.toString())
             }
         }
     }
