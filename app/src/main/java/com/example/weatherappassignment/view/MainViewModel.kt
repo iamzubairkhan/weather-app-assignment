@@ -52,8 +52,6 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    fun onRefreshButtonClicked() = refreshData()
-
     data class State(
         val city: String? = null,
         val currentCondition: String? = null,

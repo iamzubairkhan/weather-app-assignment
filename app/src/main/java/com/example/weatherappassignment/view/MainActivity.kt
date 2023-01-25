@@ -18,8 +18,12 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         binding.lifecycleOwner = this
-        binding.vm = viewModel
 
-        viewModel.refreshData()
+        with(binding) {
+            vm = viewModel
+            searchButton.setOnClickListener {
+                viewModel.refreshData(enterCityName.text.toString())
+            }
+        }
     }
 }

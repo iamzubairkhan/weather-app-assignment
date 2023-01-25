@@ -5,7 +5,7 @@ A simple weather that displays current weather, temperature, and location inform
 ## Features
 - Displays current weather (e.g. sunny, rain, snow)
 - Displays current temperature, minimum temperature, and maximum temperature
-- Displays location name (currently hardcoded to Stockholm)
+- Displays location name
 
 ## Technologies used
 - MVVM architecture

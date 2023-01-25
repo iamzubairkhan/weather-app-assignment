@@ -25,6 +25,28 @@
             android:layout_marginEnd="@dimen/screen_margin_x"
             android:visibility="@{vm.state.shouldShowContentView() ? View.VISIBLE : View.GONE}">
 
+            <EditText
+                android:id="@+id/enterCityName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/screen_margin_x"
+                android:hint="@string/enter_city_name"
+                android:importantForAutofill="no"
+                android:inputType="text"
+                app:layout_constraintBottom_toTopOf="@id/searchButton"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <Button
+                android:id="@+id/searchButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/search"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/enterCityName" />
+
             <TextView
                 android:id="@+id/cityName"
                 style="@style/Highlighted"
@@ -92,21 +114,6 @@
                 tools:text="5" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <Button
-            android:id="@+id/refresh"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/screen_margin_x"
-            android:layout_marginTop="20dp"
-            android:layout_marginEnd="@dimen/screen_margin_x"
-            android:layout_marginBottom="20dp"
-            android:onClick="@{() -> vm.onRefreshButtonClicked()}"
-            android:text="@string/refresh"
-            android:textAllCaps="false"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
