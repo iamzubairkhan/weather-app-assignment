@@ -10,6 +10,7 @@ import com.example.weatherappassignment.utils.capitalized
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.cancel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
@@ -35,6 +36,7 @@ class MainViewModel @Inject constructor(
             currentCondition = null,
             minTemperature = null,
             maxTemperature = null,
+            isLoading = null,
             errorMessage = null
         )
     }
@@ -45,6 +47,7 @@ class MainViewModel @Inject constructor(
             return
         }
         coroutineScope.launch {
+            _state.update { it.copy(isLoading = true) }
             when (val result = repository.getCurrentWeather(location = location)) {
                 is Success -> {
                     with(result.data) {
@@ -65,6 +68,7 @@ class MainViewModel @Inject constructor(
                 }
                 is Error -> _state.update { it.copy(errorMessage = result.exception.localizedMessage) }
             }
+            _state.update { it.copy(isLoading = false) }
         }
     }
 
@@ -74,6 +78,7 @@ class MainViewModel @Inject constructor(
         val currentTemperature: String? = null,
         val minTemperature: String? = null,
         val maxTemperature: String? = null,
+        val isLoading: Boolean? = null,
         val errorMessage: String? = null
     ) {
         fun shouldShowContentView(): Boolean = errorMessage == null

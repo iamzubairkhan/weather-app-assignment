@@ -15,7 +15,6 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/sky_blue"
         android:fillViewport="true">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -28,7 +27,8 @@
                 android:layout_height="match_parent"
                 android:layout_marginStart="@dimen/screen_margin_x"
                 android:layout_marginEnd="@dimen/screen_margin_x"
-                android:visibility="@{vm.state.shouldShowContentView() ? View.VISIBLE : View.GONE}">
+                android:visibility="@{vm.state.shouldShowContentView() ? View.VISIBLE : View.GONE}"
+                tools:visibility="gone">
 
                 <EditText
                     android:id="@+id/enterCityName"
@@ -122,6 +122,18 @@
                     tools:text="Max 5 &#x00B0;C" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <ProgressBar
+                android:id="@+id/progress_bar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/screen_margin_x"
+                android:indeterminate="false"
+                android:visibility="@{vm.state.isLoading ? View.VISIBLE : View.GONE}"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/errorView"
