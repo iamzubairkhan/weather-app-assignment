@@ -76,6 +76,7 @@ class WeatherViewModelTest {
             currentTemperature = "25°C",
             minTemperature = "20°C",
             maxTemperature = "30°C",
+            isLoading = false,
             errorMessage = null
         )
 
