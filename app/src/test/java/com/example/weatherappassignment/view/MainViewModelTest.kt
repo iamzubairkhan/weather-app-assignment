@@ -7,6 +7,7 @@ import com.example.weatherappassignment.data.Result.Error
 import com.example.weatherappassignment.data.Result.Success
 import com.example.weatherappassignment.data.model.Weather
 import com.example.weatherappassignment.utils.ResourceProvider
+import com.example.weatherappassignment.utils.capitalized
 import com.example.weatherappassignment.view.MainViewModel.State
 import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.CoroutineScope
@@ -70,7 +71,7 @@ class MainViewModelTest {
 
         // Then
         val expectedState = State(
-            city = location,
+            city = location.capitalized(),
             currentCondition = "Sunny",
             currentTemperature = "25°C",
             minTemperature = "20°C",
