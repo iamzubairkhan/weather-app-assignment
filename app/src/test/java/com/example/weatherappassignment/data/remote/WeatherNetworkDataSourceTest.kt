@@ -1,6 +1,7 @@
 package com.example.weatherappassignment.data.remote
 
 import com.example.weatherappassignment.BuildConfig
+import com.example.weatherappassignment.data.WeatherDataSource
 import com.example.weatherappassignment.data.model.Weather
 import com.example.weatherappassignment.utils.METRIC
 import com.google.common.truth.Truth.assertThat
@@ -13,14 +14,14 @@ import org.mockito.kotlin.mock
 import org.mockito.kotlin.whenever
 
 @ExperimentalCoroutinesApi
-class RetrofitApiClientTest {
+class WeatherNetworkDataSourceTest {
 
-    private val mockApiService = mock<ApiService>()
-    private lateinit var apiClient: ApiClient
+    private val mockWeatherApiService = mock<WeatherApiService>()
+    private lateinit var weatherDataSource: WeatherDataSource
 
     @Before
     fun setUp() {
-        apiClient = RetrofitApiClient(mockApiService)
+        weatherDataSource = WeatherNetworkDataSource(mockWeatherApiService)
     }
 
     @Test
@@ -41,10 +42,10 @@ class RetrofitApiClientTest {
             maxTemperature = 30
         )
 
-        whenever(mockApiService.getWeatherData(expectedCityName, BuildConfig.API_KEY, METRIC)).thenReturn(weatherData)
+        whenever(mockWeatherApiService.getWeatherData(expectedCityName, BuildConfig.API_KEY, METRIC)).thenReturn(weatherData)
 
         // When
-        val result = apiClient.getCurrentWeather(expectedCityName)
+        val result = weatherDataSource.getCurrentWeather(expectedCityName)
 
         // Then
         assertThat(result).isEqualTo(expectedWeather)
@@ -53,11 +54,11 @@ class RetrofitApiClientTest {
     @Test
     fun `getCurrentWeather throws exception when WeatherData is null`() = runTest {
         // Given
-        whenever(mockApiService.getWeatherData(any(), any(), any())).thenReturn(null)
+        whenever(mockWeatherApiService.getWeatherData(any(), any(), any())).thenReturn(null)
 
         // When
         val result = runCatching {
-            apiClient.getCurrentWeather("")
+            weatherDataSource.getCurrentWeather("")
         }
             .exceptionOrNull()
 
@@ -73,11 +74,11 @@ class RetrofitApiClientTest {
             weatherConditions = null,
             temperature = Temperature(currentTemp = 0.0, minTemp = 0.0, maxTemp = 0.0)
         )
-        whenever(mockApiService.getWeatherData(any(), any(), any())).thenReturn(weatherData)
+        whenever(mockWeatherApiService.getWeatherData(any(), any(), any())).thenReturn(weatherData)
 
         // When
         val result = runCatching {
-            apiClient.getCurrentWeather("")
+            weatherDataSource.getCurrentWeather("")
         }
             .exceptionOrNull()
 
@@ -93,11 +94,11 @@ class RetrofitApiClientTest {
             weatherConditions = listOf(WeatherConditions("Clouds")),
             temperature = null
         )
-        whenever(mockApiService.getWeatherData(any(), any(), any())).thenReturn(weatherData)
+        whenever(mockWeatherApiService.getWeatherData(any(), any(), any())).thenReturn(weatherData)
 
         // When
         val result = runCatching {
-            apiClient.getCurrentWeather("Stockholm")
+            weatherDataSource.getCurrentWeather("Stockholm")
         }
             .exceptionOrNull()
 

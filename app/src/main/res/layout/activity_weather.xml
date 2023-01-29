@@ -9,7 +9,7 @@
 
         <variable
             name="vm"
-            type="com.example.weatherappassignment.view.MainViewModel" />
+            type="com.example.weatherappassignment.view.WeatherViewModel" />
     </data>
 
     <ScrollView

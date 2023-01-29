@@ -13,9 +13,9 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 @ExperimentalCoroutinesApi
-class ApiServiceTest {
+class WeatherApiServiceTest {
 
-    private lateinit var service: ApiService
+    private lateinit var service: WeatherApiService
     private lateinit var mockServer: MockWebServer
 
     @Before
@@ -25,7 +25,7 @@ class ApiServiceTest {
             .baseUrl(mockServer.url("/"))
             .addConverterFactory(GsonConverterFactory.create())
             .build()
-            .create(ApiService::class.java)
+            .create(WeatherApiService::class.java)
     }
 
     @Test

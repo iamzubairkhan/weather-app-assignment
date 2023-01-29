@@ -1,7 +1,6 @@
 package com.example.weatherappassignment.data
 
 import com.example.weatherappassignment.data.model.Weather
-import com.example.weatherappassignment.data.remote.ApiClient
 import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
@@ -11,14 +10,14 @@ import org.mockito.kotlin.mock
 import org.mockito.kotlin.whenever
 
 @ExperimentalCoroutinesApi
-class RepositoryImplTest {
+class WeatherRepositoryImplTest {
 
-    private val apiClient = mock<ApiClient>()
-    private lateinit var repository: Repository
+    private val weatherDataSource = mock<WeatherDataSource>()
+    private lateinit var weatherRepository: WeatherRepository
 
     @Before
     fun setUp() {
-        repository = RepositoryImpl(apiClient)
+        weatherRepository = WeatherRepositoryImpl(weatherDataSource)
     }
 
     @Test
@@ -34,10 +33,10 @@ class RepositoryImplTest {
             maxTemperature = 5
         )
 
-        whenever(apiClient.getCurrentWeather(location)).thenReturn(expectedCurrentWeather)
+        whenever(weatherDataSource.getCurrentWeather(location)).thenReturn(expectedCurrentWeather)
 
         // When
-        val result = repository.getCurrentWeather(location)
+        val result = weatherRepository.getCurrentWeather(location)
 
         // Then
         assertThat(result).isInstanceOf(Result.Success::class.java)
@@ -50,10 +49,10 @@ class RepositoryImplTest {
         // Given
         val location = "Stockholm"
         val exception = RuntimeException("Error message")
-        whenever(apiClient.getCurrentWeather(location)).thenThrow(exception)
+        whenever(weatherDataSource.getCurrentWeather(location)).thenThrow(exception)
 
         // When
-        val result = repository.getCurrentWeather(location)
+        val result = weatherRepository.getCurrentWeather(location)
 
         // Then
         assertThat(result).isInstanceOf(Result.Error::class.java)

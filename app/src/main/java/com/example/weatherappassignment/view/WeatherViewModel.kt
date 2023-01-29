@@ -2,7 +2,7 @@ package com.example.weatherappassignment.view
 
 import androidx.lifecycle.ViewModel
 import com.example.weatherappassignment.R
-import com.example.weatherappassignment.data.Repository
+import com.example.weatherappassignment.data.WeatherRepository
 import com.example.weatherappassignment.data.Result.Success
 import com.example.weatherappassignment.data.Result.Error
 import com.example.weatherappassignment.utils.ResourceProvider
@@ -10,7 +10,6 @@ import com.example.weatherappassignment.utils.capitalized
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.cancel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
@@ -19,8 +18,8 @@ import javax.inject.Inject
 import kotlin.coroutines.CoroutineContext
 
 @HiltViewModel
-class MainViewModel @Inject constructor(
-    private val repository: Repository,
+class WeatherViewModel @Inject constructor(
+    private val weatherRepository: WeatherRepository,
     uiCoroutineContext: CoroutineContext,
     private val resourceProvider: ResourceProvider
 ) : ViewModel() {
@@ -48,7 +47,7 @@ class MainViewModel @Inject constructor(
         }
         coroutineScope.launch {
             _state.update { it.copy(isLoading = true) }
-            when (val result = repository.getCurrentWeather(location = location)) {
+            when (val result = weatherRepository.getCurrentWeather(location = location)) {
                 is Success -> {
                     with(result.data) {
                         val currentTemperature = resourceProvider.getString(R.string.current_temperature, temperature)

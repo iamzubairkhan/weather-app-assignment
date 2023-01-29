@@ -2,13 +2,13 @@ package com.example.weatherappassignment.view
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.example.weatherappassignment.R
-import com.example.weatherappassignment.data.Repository
+import com.example.weatherappassignment.data.WeatherRepository
 import com.example.weatherappassignment.data.Result.Error
 import com.example.weatherappassignment.data.Result.Success
 import com.example.weatherappassignment.data.model.Weather
 import com.example.weatherappassignment.utils.ResourceProvider
 import com.example.weatherappassignment.utils.capitalized
-import com.example.weatherappassignment.view.MainViewModel.State
+import com.example.weatherappassignment.view.WeatherViewModel.State
 import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -23,7 +23,7 @@ import org.mockito.kotlin.mock
 import org.mockito.kotlin.whenever
 
 @ExperimentalCoroutinesApi
-class MainViewModelTest {
+class WeatherViewModelTest {
 
     /*
     * UnconfinedTestDispatcher() generally not recommended to use when you have multiple coroutines in the same function because it does
@@ -32,18 +32,18 @@ class MainViewModelTest {
     * TODO("Replace UnconfinedTestDispatcher() when testing a function with multiple coroutines")
     * */
     private val testDispatcher = UnconfinedTestDispatcher()
-    private val repository = mock<Repository>()
+    private val weatherRepository = mock<WeatherRepository>()
     private val resourceProvider = mock<ResourceProvider>()
 
-    private lateinit var viewModel: MainViewModel
+    private lateinit var viewModel: WeatherViewModel
 
     @get:Rule
     var rule: TestRule = InstantTaskExecutorRule()
 
     @Before
     fun setUp() {
-        viewModel = MainViewModel(
-            repository = repository,
+        viewModel = WeatherViewModel(
+            weatherRepository = weatherRepository,
             uiCoroutineContext = testDispatcher,
             resourceProvider = resourceProvider
         )
@@ -61,7 +61,7 @@ class MainViewModelTest {
         )
 
         // Given
-        whenever(repository.getCurrentWeather(location)).thenReturn(Success(expectedWeather))
+        whenever(weatherRepository.getCurrentWeather(location)).thenReturn(Success(expectedWeather))
         whenever(resourceProvider.getString(R.string.current_temperature, 25)).thenReturn("25°C")
         whenever(resourceProvider.getString(R.string.min_temperature, 20)).thenReturn("20°C")
         whenever(resourceProvider.getString(R.string.max_temperature, 30)).thenReturn("30°C")
@@ -88,7 +88,7 @@ class MainViewModelTest {
         val error = Exception("Error message")
 
         // Given
-        whenever(repository.getCurrentWeather(location)).thenReturn(Error(error))
+        whenever(weatherRepository.getCurrentWeather(location)).thenReturn(Error(error))
 
         // When
         viewModel.getWeatherData(location = location)
@@ -104,7 +104,7 @@ class MainViewModelTest {
         // Given
         val job = Job()
         val scope = CoroutineScope(job)
-        val viewModel = MainViewModel(repository, scope.coroutineContext, resourceProvider)
+        val viewModel = WeatherViewModel(weatherRepository, scope.coroutineContext, resourceProvider)
 
         // When
         viewModel.onCleared()

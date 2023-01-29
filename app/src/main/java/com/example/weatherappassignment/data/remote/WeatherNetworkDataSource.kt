@@ -1,17 +1,14 @@
 package com.example.weatherappassignment.data.remote
 
 import com.example.weatherappassignment.BuildConfig
+import com.example.weatherappassignment.data.WeatherDataSource
 import com.example.weatherappassignment.data.model.Weather
 import com.example.weatherappassignment.utils.METRIC
 import javax.inject.Inject
 
-interface ApiClient {
-    suspend fun getCurrentWeather(location: String): Weather
-}
-
-class RetrofitApiClient @Inject constructor(private val apiService: ApiService) : ApiClient {
+class WeatherNetworkDataSource @Inject constructor(private val weatherApiService: WeatherApiService) : WeatherDataSource {
     override suspend fun getCurrentWeather(location: String): Weather {
-        return apiService
+        return weatherApiService
             .getWeatherData(
                 location = location,
                 apiKey = BuildConfig.API_KEY,
