@@ -2,9 +2,9 @@ package com.example.weatherappassignment.view
 
 import androidx.lifecycle.ViewModel
 import com.example.weatherappassignment.R
-import com.example.weatherappassignment.data.WeatherRepository
-import com.example.weatherappassignment.data.Result.Success
 import com.example.weatherappassignment.data.Result.Error
+import com.example.weatherappassignment.data.Result.Success
+import com.example.weatherappassignment.data.WeatherRepository
 import com.example.weatherappassignment.utils.ResourceProvider
 import com.example.weatherappassignment.utils.capitalized
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -28,19 +28,8 @@ class WeatherViewModel @Inject constructor(
 
     private val coroutineScope = CoroutineScope(uiCoroutineContext)
 
-    fun refreshState() = _state.update {
-        it.copy(
-            city = null,
-            currentTemperature = null,
-            currentCondition = null,
-            minTemperature = null,
-            maxTemperature = null,
-            isLoading = null,
-            errorMessage = null
-        )
-    }
-
     fun getWeatherData(location: String) {
+        resetState()
         if (location.isBlank()) {
             _state.update { it.copy(errorMessage = "Error: Location cannot be empty") }
             return
@@ -60,25 +49,46 @@ class WeatherViewModel @Inject constructor(
                                 currentTemperature = currentTemperature,
                                 minTemperature = minTemperature,
                                 maxTemperature = maxTemperature,
+                                humidity = "$humidity%",
+                                weatherType = weatherType,
                                 errorMessage = null
                             )
                         }
                     }
                 }
+
                 is Error -> _state.update { it.copy(errorMessage = result.exception.localizedMessage) }
             }
             _state.update { it.copy(isLoading = false) }
         }
     }
 
+    private fun resetState() {
+        _state.update {
+            it.copy(
+                city = null,
+                currentTemperature = null,
+                currentCondition = null,
+                minTemperature = null,
+                maxTemperature = null,
+                humidity = null,
+                weatherType = null,
+                isLoading = false,
+                errorMessage = null
+            )
+        }
+    }
+
     data class State(
+        val isLoading: Boolean = false,
+        val errorMessage: String? = null,
         val city: String? = null,
         val currentCondition: String? = null,
         val currentTemperature: String? = null,
         val minTemperature: String? = null,
         val maxTemperature: String? = null,
-        val isLoading: Boolean? = null,
-        val errorMessage: String? = null
+        val humidity: String? = null,
+        val weatherType: WeatherType? = null
     ) {
         fun shouldShowContentView(): Boolean = errorMessage == null
         fun shouldShowErrorView(): Boolean = errorMessage != null

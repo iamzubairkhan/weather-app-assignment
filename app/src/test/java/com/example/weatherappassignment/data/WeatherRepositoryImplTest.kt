@@ -1,6 +1,7 @@
 package com.example.weatherappassignment.data
 
 import com.example.weatherappassignment.data.model.Weather
+import com.example.weatherappassignment.view.WeatherType
 import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
@@ -30,7 +31,9 @@ class WeatherRepositoryImplTest {
             condition = "Clouds",
             temperature = 0,
             minTemperature = -5,
-            maxTemperature = 5
+            maxTemperature = 5,
+            humidity = 90,
+            weatherType = WeatherType.Cloudy
         )
 
         whenever(weatherDataSource.getCurrentWeather(location)).thenReturn(expectedCurrentWeather)

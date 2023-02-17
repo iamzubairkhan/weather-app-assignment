@@ -33,8 +33,8 @@ class WeatherApiServiceTest {
 
         // Given
         val location = "stockholm"
-        val expectedTemperature = Temperature(currentTemp = 0.0, minTemp = -5.0, maxTemp = 5.0)
-        val expectedWeatherConditions = listOf(WeatherConditions(condition = "Clouds"))
+        val expectedTemperature = Temperature(currentTemp = 0.0, minTemp = -5.0, maxTemp = 5.0, humidity = 90)
+        val expectedWeatherConditions = listOf(WeatherConditions(condition = "Clouds", icon = "13d"))
         val expectedWeatherData = WeatherData(temperature = expectedTemperature, weatherConditions = expectedWeatherConditions)
 
         mockServer.enqueue(MockResponse().setBody(Gson().toJson(expectedWeatherData)))

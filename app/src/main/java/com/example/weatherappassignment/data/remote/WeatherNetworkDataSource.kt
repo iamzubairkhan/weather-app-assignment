@@ -4,7 +4,9 @@ import com.example.weatherappassignment.BuildConfig
 import com.example.weatherappassignment.data.WeatherDataSource
 import com.example.weatherappassignment.data.model.Weather
 import com.example.weatherappassignment.utils.METRIC
+import com.example.weatherappassignment.view.WeatherType
 import javax.inject.Inject
+import kotlin.math.roundToInt
 
 class WeatherNetworkDataSource @Inject constructor(private val weatherApiService: WeatherApiService) : WeatherDataSource {
     override suspend fun getCurrentWeather(location: String): Weather {
@@ -21,7 +23,9 @@ class WeatherNetworkDataSource @Inject constructor(private val weatherApiService
 private fun WeatherData.map(location: String): Weather = Weather(
     cityName = location,
     condition = weatherConditions?.firstOrNull()?.condition ?: throw Exception("weatherCondition is null"),
-    temperature = temperature?.currentTemp?.toInt() ?: throw Exception("currentTemp is null"),
-    minTemperature = temperature.minTemp?.toInt(),
-    maxTemperature = temperature.maxTemp?.toInt()
+    temperature = temperature?.currentTemp?.roundToInt() ?: throw Exception("currentTemp is null"),
+    minTemperature = temperature.minTemp?.roundToInt(),
+    maxTemperature = temperature.maxTemp?.roundToInt(),
+    humidity = temperature.humidity,
+    weatherType = WeatherType.fromCode(weatherConditions.firstOrNull()?.icon)
 )

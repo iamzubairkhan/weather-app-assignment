@@ -4,6 +4,7 @@ import com.example.weatherappassignment.BuildConfig
 import com.example.weatherappassignment.data.WeatherDataSource
 import com.example.weatherappassignment.data.model.Weather
 import com.example.weatherappassignment.utils.METRIC
+import com.example.weatherappassignment.view.WeatherType
 import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
@@ -31,15 +32,17 @@ class WeatherNetworkDataSourceTest {
         val expectedCityName = "Stockholm"
         val expectedWeatherCondition = "Clear"
         val weatherData = WeatherData(
-            weatherConditions = listOf(WeatherConditions(expectedWeatherCondition)),
-            temperature = Temperature(currentTemp = 25.0, minTemp = 20.0, maxTemp = 30.0)
+            weatherConditions = listOf(WeatherConditions(expectedWeatherCondition, icon = "13d")),
+            temperature = Temperature(currentTemp = 25.0, minTemp = 20.0, maxTemp = 30.0, humidity = 90)
         )
         val expectedWeather = Weather(
             cityName = expectedCityName,
             condition = expectedWeatherCondition,
             temperature = 25,
             minTemperature = 20,
-            maxTemperature = 30
+            maxTemperature = 30,
+            humidity = 90,
+            weatherType = WeatherType.Snow
         )
 
         whenever(mockWeatherApiService.getWeatherData(expectedCityName, BuildConfig.API_KEY, METRIC)).thenReturn(weatherData)
@@ -72,7 +75,7 @@ class WeatherNetworkDataSourceTest {
         // Given
         val weatherData = WeatherData(
             weatherConditions = null,
-            temperature = Temperature(currentTemp = 0.0, minTemp = 0.0, maxTemp = 0.0)
+            temperature = Temperature(currentTemp = 0.0, minTemp = 0.0, maxTemp = 0.0, humidity = 90)
         )
         whenever(mockWeatherApiService.getWeatherData(any(), any(), any())).thenReturn(weatherData)
 
@@ -91,7 +94,7 @@ class WeatherNetworkDataSourceTest {
     fun `getCurrentWeather throws exception when currentTemp is null`() = runTest {
         // Given
         val weatherData = WeatherData(
-            weatherConditions = listOf(WeatherConditions("Clouds")),
+            weatherConditions = listOf(WeatherConditions("Clouds", "13d")),
             temperature = null
         )
         whenever(mockWeatherApiService.getWeatherData(any(), any(), any())).thenReturn(weatherData)
