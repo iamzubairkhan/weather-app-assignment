@@ -2,9 +2,9 @@ package com.example.weatherappassignment.view
 
 import androidx.lifecycle.ViewModel
 import com.example.weatherappassignment.R
-import com.example.weatherappassignment.data.WeatherRepository
-import com.example.weatherappassignment.data.Result.Success
 import com.example.weatherappassignment.data.Result.Error
+import com.example.weatherappassignment.data.Result.Success
+import com.example.weatherappassignment.data.WeatherRepository
 import com.example.weatherappassignment.utils.ResourceProvider
 import com.example.weatherappassignment.utils.capitalized
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -35,7 +35,7 @@ class WeatherViewModel @Inject constructor(
             currentCondition = null,
             minTemperature = null,
             maxTemperature = null,
-            isLoading = null,
+            isLoading = false,
             errorMessage = null
         )
     }
@@ -77,7 +77,7 @@ class WeatherViewModel @Inject constructor(
         val currentTemperature: String? = null,
         val minTemperature: String? = null,
         val maxTemperature: String? = null,
-        val isLoading: Boolean? = null,
+        val isLoading: Boolean = false,
         val errorMessage: String? = null
     ) {
         fun shouldShowContentView(): Boolean = errorMessage == null
