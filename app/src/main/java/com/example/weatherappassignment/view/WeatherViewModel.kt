@@ -60,11 +60,14 @@ class WeatherViewModel @Inject constructor(
                                 currentTemperature = currentTemperature,
                                 minTemperature = minTemperature,
                                 maxTemperature = maxTemperature,
+                                humidity = "$humidity%",
+                                weatherType = weatherType,
                                 errorMessage = null
                             )
                         }
                     }
                 }
+
                 is Error -> _state.update { it.copy(errorMessage = result.exception.localizedMessage) }
             }
             _state.update { it.copy(isLoading = false) }
@@ -77,7 +80,9 @@ class WeatherViewModel @Inject constructor(
         val currentTemperature: String? = null,
         val minTemperature: String? = null,
         val maxTemperature: String? = null,
+        val humidity: String? = null,
         val isLoading: Boolean = false,
+        val weatherType: WeatherType? = null,
         val errorMessage: String? = null
     ) {
         fun shouldShowContentView(): Boolean = errorMessage == null

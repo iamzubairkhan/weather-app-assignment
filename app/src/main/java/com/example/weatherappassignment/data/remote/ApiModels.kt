@@ -11,7 +11,9 @@ data class WeatherData(
 
 data class WeatherConditions(
     @SerializedName("main")
-    val condition: String?
+    val condition: String?,
+    @SerializedName("icon")
+    val icon: String?
 )
 
 data class Temperature(
@@ -20,5 +22,7 @@ data class Temperature(
     @SerializedName("temp_max")
     val maxTemp: Double?,
     @SerializedName("temp_min")
-    val minTemp: Double?
+    val minTemp: Double?,
+    @SerializedName("humidity")
+    val humidity: Int?
 )

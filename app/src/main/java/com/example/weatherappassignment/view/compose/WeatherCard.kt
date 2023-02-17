@@ -43,11 +43,13 @@ fun WeatherCard(
                     .padding(16.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Image(
-                    painter = painterResource(id = R.drawable.ic_cloudy),
-                    contentDescription = null,
-                    modifier = Modifier.width(200.dp)
-                )
+                state.weatherType?.let {
+                    Image(
+                        painter = painterResource(id = it.iconRes),
+                        contentDescription = null,
+                        modifier = Modifier.width(200.dp)
+                    )
+                }
                 Spacer(modifier = Modifier.height(16.dp))
                 Text(
                     text = state.currentTemperature,
@@ -75,12 +77,14 @@ fun WeatherCard(
                             textStyle = TextStyle(color = Color.White)
                         )
                     }
-                    WeatherDataElement(
-                        value = "50%",
-                        icon = ImageVector.vectorResource(id = R.drawable.ic_drop),
-                        iconTint = Color.White,
-                        textStyle = TextStyle(color = Color.White)
-                    )
+                    state.humidity?.let {
+                        WeatherDataElement(
+                            value = it,
+                            icon = ImageVector.vectorResource(id = R.drawable.ic_drop),
+                            iconTint = Color.White,
+                            textStyle = TextStyle(color = Color.White)
+                        )
+                    }
                     state.maxTemperature?.let {
                         WeatherDataElement(
                             value = it,

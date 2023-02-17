@@ -2,9 +2,9 @@ package com.example.weatherappassignment.view
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.example.weatherappassignment.R
-import com.example.weatherappassignment.data.WeatherRepository
 import com.example.weatherappassignment.data.Result.Error
 import com.example.weatherappassignment.data.Result.Success
+import com.example.weatherappassignment.data.WeatherRepository
 import com.example.weatherappassignment.data.model.Weather
 import com.example.weatherappassignment.utils.ResourceProvider
 import com.example.weatherappassignment.utils.capitalized
@@ -57,7 +57,9 @@ class WeatherViewModelTest {
             condition = "Sunny",
             temperature = 25,
             minTemperature = 20,
-            maxTemperature = 30
+            maxTemperature = 30,
+            humidity = 90,
+            weatherType = WeatherType.Cloudy
         )
 
         // Given
@@ -76,6 +78,8 @@ class WeatherViewModelTest {
             currentTemperature = "25°C",
             minTemperature = "20°C",
             maxTemperature = "30°C",
+            humidity = "90%",
+            weatherType = WeatherType.Cloudy,
             isLoading = false,
             errorMessage = null
         )
