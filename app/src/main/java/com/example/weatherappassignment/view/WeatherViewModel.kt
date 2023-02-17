@@ -28,19 +28,8 @@ class WeatherViewModel @Inject constructor(
 
     private val coroutineScope = CoroutineScope(uiCoroutineContext)
 
-    fun refreshState() = _state.update {
-        it.copy(
-            city = null,
-            currentTemperature = null,
-            currentCondition = null,
-            minTemperature = null,
-            maxTemperature = null,
-            isLoading = false,
-            errorMessage = null
-        )
-    }
-
     fun getWeatherData(location: String) {
+        resetState()
         if (location.isBlank()) {
             _state.update { it.copy(errorMessage = "Error: Location cannot be empty") }
             return
@@ -74,16 +63,32 @@ class WeatherViewModel @Inject constructor(
         }
     }
 
+    private fun resetState() {
+        _state.update {
+            it.copy(
+                city = null,
+                currentTemperature = null,
+                currentCondition = null,
+                minTemperature = null,
+                maxTemperature = null,
+                humidity = null,
+                weatherType = null,
+                isLoading = false,
+                errorMessage = null
+            )
+        }
+    }
+
     data class State(
+        val isLoading: Boolean = false,
+        val errorMessage: String? = null,
         val city: String? = null,
         val currentCondition: String? = null,
         val currentTemperature: String? = null,
         val minTemperature: String? = null,
         val maxTemperature: String? = null,
         val humidity: String? = null,
-        val isLoading: Boolean = false,
-        val weatherType: WeatherType? = null,
-        val errorMessage: String? = null
+        val weatherType: WeatherType? = null
     ) {
         fun shouldShowContentView(): Boolean = errorMessage == null
         fun shouldShowErrorView(): Boolean = errorMessage != null
