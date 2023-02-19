@@ -1,4 +1,4 @@
-package com.example.weatherappassignment.view
+package com.example.weatherappassignment.view.compose
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement

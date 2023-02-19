@@ -17,6 +17,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.weatherappassignment.view.WeatherViewModel.State
+import com.example.weatherappassignment.view.compose.SearchableTextField
+import com.example.weatherappassignment.view.compose.WeatherCard
 import com.example.weatherappassignment.view.theme.DarkBlue
 import com.example.weatherappassignment.view.theme.DeepBlue
 
