@@ -20,18 +20,26 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.weatherappassignment.R
-import com.example.weatherappassignment.view.WeatherViewModel.State
+import com.example.weatherappassignment.view.WeatherType
+import com.example.weatherappassignment.view.WeatherType.Snow
+import com.example.weatherappassignment.view.theme.DeepBlue
 
 @Composable
 fun WeatherCard(
-    state: State,
+    currentTemperature: String?,
+    weatherType: WeatherType?,
+    currentCondition: String?,
+    minTemperature: String?,
+    humidity: String?,
+    maxTemperature: String?,
     backgroundColor: Color,
     modifier: Modifier = Modifier
 ) {
-    state.currentTemperature?.let {
+    currentTemperature?.let {
         Card(
             backgroundColor = backgroundColor,
             shape = RoundedCornerShape(10.dp),
@@ -43,7 +51,7 @@ fun WeatherCard(
                     .padding(16.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                state.weatherType?.let {
+                weatherType?.let {
                     Image(
                         painter = painterResource(id = it.iconRes),
                         contentDescription = null,
@@ -52,12 +60,12 @@ fun WeatherCard(
                 }
                 Spacer(modifier = Modifier.height(16.dp))
                 Text(
-                    text = state.currentTemperature,
+                    text = currentTemperature,
                     fontSize = 50.sp,
                     color = Color.White
                 )
                 Spacer(modifier = Modifier.height(16.dp))
-                state.currentCondition?.let {
+                currentCondition?.let {
                     Text(
                         text = it,
                         fontSize = 20.sp,
@@ -69,7 +77,7 @@ fun WeatherCard(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceAround
                 ) {
-                    state.minTemperature?.let {
+                    minTemperature?.let {
                         WeatherDataElement(
                             value = it,
                             icon = ImageVector.vectorResource(id = R.drawable.ic_min_temp),
@@ -77,7 +85,7 @@ fun WeatherCard(
                             textStyle = TextStyle(color = Color.White)
                         )
                     }
-                    state.humidity?.let {
+                    humidity?.let {
                         WeatherDataElement(
                             value = it,
                             icon = ImageVector.vectorResource(id = R.drawable.ic_drop),
@@ -85,7 +93,7 @@ fun WeatherCard(
                             textStyle = TextStyle(color = Color.White)
                         )
                     }
-                    state.maxTemperature?.let {
+                    maxTemperature?.let {
                         WeatherDataElement(
                             value = it,
                             icon = ImageVector.vectorResource(id = R.drawable.ic_max_temp),
@@ -97,4 +105,18 @@ fun WeatherCard(
             }
         }
     }
+}
+
+@Preview
+@Composable
+fun PreviewWeatherCard() {
+    WeatherCard(
+        currentTemperature = "5C",
+        weatherType = Snow,
+        currentCondition = "Snow",
+        minTemperature = "-5C",
+        humidity = "80%",
+        maxTemperature = "10C",
+        backgroundColor = DeepBlue
+    )
 }

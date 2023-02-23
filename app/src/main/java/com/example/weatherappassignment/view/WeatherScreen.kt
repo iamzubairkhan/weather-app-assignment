@@ -45,7 +45,12 @@ fun WeatherScreen(state: State, onSearch: (String) -> Unit) {
                     modifier = Modifier.fillMaxSize()
                 ) {
                     WeatherCard(
-                        state = state,
+                        currentTemperature = state.currentTemperature,
+                        weatherType = state.weatherType,
+                        currentCondition = state.currentCondition,
+                        minTemperature = state.minTemperature,
+                        humidity = state.humidity,
+                        maxTemperature = state.maxTemperature,
                         backgroundColor = DeepBlue
                     )
                 }
