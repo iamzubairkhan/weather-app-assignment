@@ -33,17 +33,15 @@ fun WeatherCard(
     currentTemperature: String?,
     weatherType: WeatherType?,
     currentCondition: String?,
-    minTemperature: String?,
-    humidity: String?,
-    maxTemperature: String?,
-    backgroundColor: Color,
-    modifier: Modifier = Modifier
+    minTemperature: String? = null,
+    humidity: String? = null,
+    maxTemperature: String? = null,
+    backgroundColor: Color = DeepBlue
 ) {
     currentTemperature?.let {
         Card(
             backgroundColor = backgroundColor,
-            shape = RoundedCornerShape(10.dp),
-            modifier = modifier.padding(top = 20.dp)
+            shape = RoundedCornerShape(10.dp)
         ) {
             Column(
                 modifier = Modifier
@@ -109,14 +107,23 @@ fun WeatherCard(
 
 @Preview
 @Composable
-fun PreviewWeatherCard() {
+fun PreviewWeatherCardDetails() {
     WeatherCard(
         currentTemperature = "5C",
         weatherType = Snow,
         currentCondition = "Snow",
-        minTemperature = "-5C",
+        minTemperature = "-3",
+        maxTemperature = "10",
         humidity = "80%",
-        maxTemperature = "10C",
-        backgroundColor = DeepBlue
+    )
+}
+
+@Preview
+@Composable
+fun PreviewWeatherCardSummary() {
+    WeatherCard(
+        currentTemperature = "5C",
+        weatherType = Snow,
+        currentCondition = "Snow"
     )
 }

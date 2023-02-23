@@ -16,14 +16,23 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.weatherappassignment.view.WeatherViewModel.State
 import com.example.weatherappassignment.view.compose.SearchableTextField
 import com.example.weatherappassignment.view.compose.WeatherCard
 import com.example.weatherappassignment.view.theme.DarkBlue
 import com.example.weatherappassignment.view.theme.DeepBlue
 
 @Composable
-fun WeatherScreen(state: State, onSearch: (String) -> Unit) {
+fun WeatherScreen(
+    currentTemperature: String?,
+    weatherType: WeatherType?,
+    currentCondition: String?,
+    minTemperature: String?,
+    humidity: String?,
+    maxTemperature: String?,
+    isLoading: Boolean,
+    errorMessage: String?,
+    onSearch: (String) -> Unit
+) {
     Column(
         modifier = Modifier
             .background(DarkBlue)
@@ -36,26 +45,28 @@ fun WeatherScreen(state: State, onSearch: (String) -> Unit) {
             onSearch = { onSearch(it) }
         )
         Box(modifier = Modifier.fillMaxSize()) {
-            if (state.isLoading) {
+            if (isLoading) {
                 CircularProgressIndicator(
                     modifier = Modifier.align(Alignment.Center)
                 )
             } else {
                 Column(
-                    modifier = Modifier.fillMaxSize()
+                    modifier = Modifier
+                        .padding(top = 20.dp)
+                        .fillMaxSize()
                 ) {
                     WeatherCard(
-                        currentTemperature = state.currentTemperature,
-                        weatherType = state.weatherType,
-                        currentCondition = state.currentCondition,
-                        minTemperature = state.minTemperature,
-                        humidity = state.humidity,
-                        maxTemperature = state.maxTemperature,
+                        currentTemperature = currentTemperature,
+                        weatherType = weatherType,
+                        currentCondition = currentCondition,
+                        minTemperature = minTemperature,
+                        humidity = humidity,
+                        maxTemperature = maxTemperature,
                         backgroundColor = DeepBlue
                     )
                 }
             }
-            state.errorMessage?.let { error ->
+            errorMessage?.let { error ->
                 Text(
                     text = error,
                     color = Color.Red,
@@ -70,12 +81,15 @@ fun WeatherScreen(state: State, onSearch: (String) -> Unit) {
 @Preview
 @Composable
 private fun PreviewWeatherScreen() {
-    val state = State(
-        city = "Stockholm",
-        currentCondition = "Cloudy",
-        currentTemperature = "5",
-        minTemperature = "1",
-        maxTemperature = "10"
+    WeatherScreen(
+        weatherType = WeatherType.ClearSky,
+        humidity = "70%",
+        currentCondition = "Clear",
+        currentTemperature = "5C",
+        minTemperature = "-3C",
+        maxTemperature = "10C",
+        isLoading = false,
+        errorMessage = null,
+        onSearch = {}
     )
-    WeatherScreen(state = state, onSearch = {})
 }

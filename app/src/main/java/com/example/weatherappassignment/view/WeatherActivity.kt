@@ -23,10 +23,20 @@ class WeatherActivity : AppCompatActivity() {
             val keyboardController = LocalSoftwareKeyboardController.current
             WeatherAppTheme {
                 val state by viewModel.state.collectAsState()
-                WeatherScreen(state = state, onSearch = {
-                    viewModel.getWeatherData(location = it)
-                    keyboardController?.hide()
-                })
+                WeatherScreen(
+                    currentTemperature = state.currentTemperature,
+                    weatherType = state.weatherType,
+                    currentCondition = state.currentCondition,
+                    minTemperature = state.minTemperature,
+                    humidity = state.humidity,
+                    maxTemperature = state.maxTemperature,
+                    isLoading = state.isLoading,
+                    errorMessage = state.errorMessage,
+                    onSearch = {
+                        viewModel.getWeatherData(location = it)
+                        keyboardController?.hide()
+                    }
+                )
             }
         }
     }
