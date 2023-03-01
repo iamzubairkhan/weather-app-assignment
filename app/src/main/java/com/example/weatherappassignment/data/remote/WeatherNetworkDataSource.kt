@@ -3,9 +3,15 @@ package com.example.weatherappassignment.data.remote
 import com.example.weatherappassignment.BuildConfig
 import com.example.weatherappassignment.data.WeatherDataSource
 import com.example.weatherappassignment.data.model.Weather
+import com.example.weatherappassignment.data.remote.ApiException.ClientException
+import com.example.weatherappassignment.data.remote.ApiException.NetworkException
+import com.example.weatherappassignment.data.remote.ApiException.ServerException
+import com.example.weatherappassignment.data.remote.ApiException.UnknownException
 import com.example.weatherappassignment.view.WeatherType
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import retrofit2.HttpException
+import java.io.IOException
 import javax.inject.Inject
 import kotlin.math.roundToInt
 
@@ -15,13 +21,23 @@ class WeatherNetworkDataSource @Inject constructor(private val weatherApiService
             val weather = weatherApiService
                 .getWeatherData(
                     location = location,
-                    apiKey = BuildConfig.API_KEY,
-                    temperatureUnit = temperatureUnit
+                    temperatureUnit = temperatureUnit,
+                    apiKey = BuildConfig.API_KEY
                 )
-                ?.map(location) ?: throw Exception("WeatherData is null")
+                .map(location)
             Result.success(value = weather)
+        } catch (exception: IOException) {
+            Result.failure(NetworkException("Network error \nPlease make sure you are connected to internet", exception))
+        } catch (exception: HttpException) {
+            Result.failure(
+                when (exception.code()) {
+                    in 400..499 -> ClientException("Invalid input \nPlease try again", exception)
+                    in 500..599 -> ServerException("Something wrong on our end \nPlease try again", exception)
+                    else -> UnknownException("Something went wrong \nPlease try again", exception)
+                }
+            )
         } catch (exception: Exception) {
-            Result.failure(exception)
+            Result.failure(UnknownException("Something went wrong \nPlease try again", exception))
         }
     }
 }

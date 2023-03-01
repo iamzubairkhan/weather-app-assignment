@@ -67,7 +67,7 @@ class WeatherNetworkDataSourceTest {
 
         // Then
         assertThat(result).isInstanceOf(Exception::class.java)
-        assertThat(result).hasMessageThat().isEqualTo("WeatherData is null")
+        assertThat(result).hasMessageThat().isEqualTo("Something went wrong \nPlease try again")
     }
 
     @Test
@@ -87,7 +87,7 @@ class WeatherNetworkDataSourceTest {
 
         // Then
         assertThat(result).isInstanceOf(Exception::class.java)
-        assertThat(result).hasMessageThat().isEqualTo("weatherCondition is null")
+        assertThat(result).hasMessageThat().isEqualTo("Something went wrong \nPlease try again")
     }
 
     @Test
@@ -107,6 +107,6 @@ class WeatherNetworkDataSourceTest {
 
         // Then
         assertThat(result).isInstanceOf(Exception::class.java)
-        assertThat(result).hasMessageThat().isEqualTo("currentTemp is null")
+        assertThat(result).hasMessageThat().isEqualTo("Something went wrong \nPlease try again")
     }
 }

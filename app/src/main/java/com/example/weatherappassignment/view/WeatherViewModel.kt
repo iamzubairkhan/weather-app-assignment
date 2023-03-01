@@ -29,7 +29,7 @@ class WeatherViewModel @Inject constructor(
     fun getWeatherData(location: String) {
         _state.update { State() }
         if (location.isBlank()) {
-            _state.update { it.copy(errorMessage = "You did not enter any location") }
+            _state.update { it.copy(errorMessage = "No location entered \nPlease enter valid location") }
             return
         }
         coroutineScope.launch {
@@ -53,7 +53,7 @@ class WeatherViewModel @Inject constructor(
                     }
                 }
             } catch (exception: Exception) {
-                _state.update { it.copy(errorMessage = exception.localizedMessage) }
+                _state.update { it.copy(errorMessage = exception.message) }
             }
             _state.update { it.copy(isLoading = false) }
         }
