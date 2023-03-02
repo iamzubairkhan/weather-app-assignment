@@ -36,14 +36,14 @@ class WeatherRepositoryImplTest {
             weatherType = WeatherType.Cloudy
         )
 
-        whenever(weatherDataSource.getCurrentWeather(location)).thenReturn(expectedCurrentWeather)
+        whenever(weatherDataSource.getCurrentWeather(location)).thenReturn(Result.success(expectedCurrentWeather))
 
         // When
-        val result = weatherRepository.getCurrentWeather(location)
+        val result = weatherRepository.getCurrentWeather(location).getOrNull()
 
         // Then
-        assertThat(result).isInstanceOf(Result.Success::class.java)
-        assertThat((result as Result.Success).data).isEqualTo(expectedCurrentWeather)
+        assertThat(result).isNotNull()
+        assertThat(result).isEqualTo(expectedCurrentWeather)
     }
 
     @Test
@@ -52,13 +52,13 @@ class WeatherRepositoryImplTest {
         // Given
         val location = "Stockholm"
         val exception = RuntimeException("Error message")
-        whenever(weatherDataSource.getCurrentWeather(location)).thenThrow(exception)
+        whenever(weatherDataSource.getCurrentWeather(location)).thenReturn(Result.failure(exception))
 
         // When
-        val result = weatherRepository.getCurrentWeather(location)
+        val result = runCatching { weatherRepository.getCurrentWeather(location).getOrThrow() }.exceptionOrNull()
 
         // Then
-        assertThat(result).isInstanceOf(Result.Error::class.java)
-        assertThat((result as Result.Error).exception).isEqualTo(exception)
+        assertThat(result).isInstanceOf(Exception::class.java)
+        assertThat(result).hasMessageThat().isEqualTo("Error message")
     }
 }

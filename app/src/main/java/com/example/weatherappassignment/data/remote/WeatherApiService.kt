@@ -9,5 +9,5 @@ interface WeatherApiService {
         @Query("q") location: String,
         @Query("appid") apiKey: String,
         @Query("units") temperatureUnit: String
-    ): WeatherData?
+    ): ApiWeather?
 }

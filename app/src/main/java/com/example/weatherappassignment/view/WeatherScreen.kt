@@ -38,13 +38,16 @@ fun WeatherScreen(
             .background(DarkBlue)
             .fillMaxSize()
             .padding(16.dp)
-            .verticalScroll(rememberScrollState())
     ) {
         SearchableTextField(
             searchHint = "Search locations...",
             onSearch = { onSearch(it) }
         )
-        Box(modifier = Modifier.fillMaxSize()) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState())
+        ) {
             if (isLoading) {
                 CircularProgressIndicator(
                     modifier = Modifier.align(Alignment.Center)

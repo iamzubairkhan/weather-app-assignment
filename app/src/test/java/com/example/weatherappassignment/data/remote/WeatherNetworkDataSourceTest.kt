@@ -26,14 +26,14 @@ class WeatherNetworkDataSourceTest {
     }
 
     @Test
-    fun `getCurrentWeather returns mapped Weather object when service returns success response`() = runTest {
+    fun `getCurrentWeather returns mapped weather success result when service returns success response`() = runTest {
 
         // Given
         val expectedCityName = "Stockholm"
         val expectedWeatherCondition = "Clear"
-        val weatherData = WeatherData(
-            weatherConditions = listOf(WeatherConditions(expectedWeatherCondition, icon = "13d")),
-            temperature = Temperature(currentTemp = 25.0, minTemp = 20.0, maxTemp = 30.0, humidity = 90)
+        val apiWeather = ApiWeather(
+            apiWeatherConditions = listOf(ApiWeatherConditions(expectedWeatherCondition, icon = "13d")),
+            apiTemperature = ApiTemperature(currentTemp = 25.0, minTemp = 20.0, maxTemp = 30.0, humidity = 90)
         )
         val expectedWeather = Weather(
             cityName = expectedCityName,
@@ -45,13 +45,13 @@ class WeatherNetworkDataSourceTest {
             weatherType = WeatherType.Snow
         )
 
-        whenever(mockWeatherApiService.getWeatherData(expectedCityName, BuildConfig.API_KEY, METRIC)).thenReturn(weatherData)
+        whenever(mockWeatherApiService.getWeatherData(expectedCityName, BuildConfig.API_KEY, METRIC)).thenReturn(apiWeather)
 
         // When
         val result = weatherDataSource.getCurrentWeather(expectedCityName)
 
         // Then
-        assertThat(result).isEqualTo(expectedWeather)
+        assertThat(result).isEqualTo(Result.success(expectedWeather))
     }
 
     @Test
@@ -61,7 +61,7 @@ class WeatherNetworkDataSourceTest {
 
         // When
         val result = runCatching {
-            weatherDataSource.getCurrentWeather("")
+            weatherDataSource.getCurrentWeather("").getOrThrow()
         }
             .exceptionOrNull()
 
@@ -73,15 +73,15 @@ class WeatherNetworkDataSourceTest {
     @Test
     fun `getCurrentWeather throws exception when weatherCondition is null`() = runTest {
         // Given
-        val weatherData = WeatherData(
-            weatherConditions = null,
-            temperature = Temperature(currentTemp = 0.0, minTemp = 0.0, maxTemp = 0.0, humidity = 90)
+        val apiWeather = ApiWeather(
+            apiWeatherConditions = null,
+            apiTemperature = ApiTemperature(currentTemp = 0.0, minTemp = 0.0, maxTemp = 0.0, humidity = 90)
         )
-        whenever(mockWeatherApiService.getWeatherData(any(), any(), any())).thenReturn(weatherData)
+        whenever(mockWeatherApiService.getWeatherData(any(), any(), any())).thenReturn(apiWeather)
 
         // When
         val result = runCatching {
-            weatherDataSource.getCurrentWeather("")
+            weatherDataSource.getCurrentWeather("").getOrThrow()
         }
             .exceptionOrNull()
 
@@ -93,15 +93,15 @@ class WeatherNetworkDataSourceTest {
     @Test
     fun `getCurrentWeather throws exception when currentTemp is null`() = runTest {
         // Given
-        val weatherData = WeatherData(
-            weatherConditions = listOf(WeatherConditions("Clouds", "13d")),
-            temperature = null
+        val apiWeather = ApiWeather(
+            apiWeatherConditions = listOf(ApiWeatherConditions("Clouds", "13d")),
+            apiTemperature = null
         )
-        whenever(mockWeatherApiService.getWeatherData(any(), any(), any())).thenReturn(weatherData)
+        whenever(mockWeatherApiService.getWeatherData(any(), any(), any())).thenReturn(apiWeather)
 
         // When
         val result = runCatching {
-            weatherDataSource.getCurrentWeather("Stockholm")
+            weatherDataSource.getCurrentWeather("Stockholm").getOrThrow()
         }
             .exceptionOrNull()
 

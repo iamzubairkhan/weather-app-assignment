@@ -2,21 +2,21 @@ package com.example.weatherappassignment.data.remote
 
 import com.google.gson.annotations.SerializedName
 
-data class WeatherData(
+data class ApiWeather(
     @SerializedName("main")
-    val temperature: Temperature?,
+    val apiTemperature: ApiTemperature?,
     @SerializedName("weather")
-    val weatherConditions: List<WeatherConditions>?
+    val apiWeatherConditions: List<ApiWeatherConditions>?
 )
 
-data class WeatherConditions(
+data class ApiWeatherConditions(
     @SerializedName("main")
     val condition: String?,
     @SerializedName("icon")
     val icon: String?
 )
 
-data class Temperature(
+data class ApiTemperature(
     @SerializedName("temp")
     val currentTemp: Double?,
     @SerializedName("temp_max")

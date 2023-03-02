@@ -2,8 +2,6 @@ package com.example.weatherappassignment.view
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.example.weatherappassignment.R
-import com.example.weatherappassignment.data.Result.Error
-import com.example.weatherappassignment.data.Result.Success
 import com.example.weatherappassignment.data.WeatherRepository
 import com.example.weatherappassignment.data.model.Weather
 import com.example.weatherappassignment.utils.ResourceProvider
@@ -50,7 +48,7 @@ class WeatherViewModelTest {
     }
 
     @Test
-    fun `refreshData updates state with weather data when API call is successful`() = runTest {
+    fun `getCurrentWeather updates state with weather data when API call is successful`() = runTest {
         val location = "stockholm"
         val expectedWeather = Weather(
             cityName = location,
@@ -63,7 +61,7 @@ class WeatherViewModelTest {
         )
 
         // Given
-        whenever(weatherRepository.getCurrentWeather(location)).thenReturn(Success(expectedWeather))
+        whenever(weatherRepository.getCurrentWeather(location)).thenReturn(Result.success(expectedWeather))
         whenever(resourceProvider.getString(R.string.current_temperature, 25)).thenReturn("25°C")
         whenever(resourceProvider.getString(R.string.min_temperature, 20)).thenReturn("20°C")
         whenever(resourceProvider.getString(R.string.max_temperature, 30)).thenReturn("30°C")
@@ -88,12 +86,12 @@ class WeatherViewModelTest {
     }
 
     @Test
-    fun `refreshData updates state with error message when API call results in error`() = runTest {
+    fun `getCurrentWeather updates state with error message when API call results in error`() = runTest {
         val location = "stockholm"
         val error = Exception("Error message")
 
         // Given
-        whenever(weatherRepository.getCurrentWeather(location)).thenReturn(Error(error))
+        whenever(weatherRepository.getCurrentWeather(location)).thenReturn(Result.failure(error))
 
         // When
         viewModel.getWeatherData(location = location)

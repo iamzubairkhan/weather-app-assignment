@@ -2,8 +2,6 @@ package com.example.weatherappassignment.view
 
 import androidx.lifecycle.ViewModel
 import com.example.weatherappassignment.R
-import com.example.weatherappassignment.data.Result.Error
-import com.example.weatherappassignment.data.Result.Success
 import com.example.weatherappassignment.data.WeatherRepository
 import com.example.weatherappassignment.utils.ResourceProvider
 import com.example.weatherappassignment.utils.capitalized
@@ -29,53 +27,35 @@ class WeatherViewModel @Inject constructor(
     private val coroutineScope = CoroutineScope(uiCoroutineContext)
 
     fun getWeatherData(location: String) {
-        resetState()
+        _state.update { State() }
         if (location.isBlank()) {
-            _state.update { it.copy(errorMessage = "Error: Location cannot be empty") }
+            _state.update { it.copy(errorMessage = "You did not enter any location") }
             return
         }
         coroutineScope.launch {
             _state.update { it.copy(isLoading = true) }
-            when (val result = weatherRepository.getCurrentWeather(location = location)) {
-                is Success -> {
-                    with(result.data) {
-                        val currentTemperature = resourceProvider.getString(R.string.current_temperature, temperature)
-                        val minTemperature = minTemperature?.let { resourceProvider.getString(R.string.min_temperature, it) }
-                        val maxTemperature = maxTemperature?.let { resourceProvider.getString(R.string.max_temperature, it) }
-                        _state.update {
-                            it.copy(
-                                city = cityName.capitalized(),
-                                currentCondition = condition,
-                                currentTemperature = currentTemperature,
-                                minTemperature = minTemperature,
-                                maxTemperature = maxTemperature,
-                                humidity = "$humidity%",
-                                weatherType = weatherType,
-                                errorMessage = null
-                            )
-                        }
+            try {
+                val result = weatherRepository.getCurrentWeather(location = location).getOrThrow()
+                with(result) {
+                    val currentTemperature = resourceProvider.getString(R.string.current_temperature, temperature)
+                    val minTemperature = minTemperature?.let { resourceProvider.getString(R.string.min_temperature, it) }
+                    val maxTemperature = maxTemperature?.let { resourceProvider.getString(R.string.max_temperature, it) }
+                    _state.update {
+                        it.copy(
+                            city = cityName.capitalized(),
+                            currentCondition = condition,
+                            currentTemperature = currentTemperature,
+                            minTemperature = minTemperature,
+                            maxTemperature = maxTemperature,
+                            humidity = "$humidity%",
+                            weatherType = weatherType
+                        )
                     }
                 }
-
-                is Error -> _state.update { it.copy(errorMessage = result.exception.localizedMessage) }
+            } catch (exception: Exception) {
+                _state.update { it.copy(errorMessage = exception.localizedMessage) }
             }
             _state.update { it.copy(isLoading = false) }
-        }
-    }
-
-    private fun resetState() {
-        _state.update {
-            it.copy(
-                city = null,
-                currentTemperature = null,
-                currentCondition = null,
-                minTemperature = null,
-                maxTemperature = null,
-                humidity = null,
-                weatherType = null,
-                isLoading = false,
-                errorMessage = null
-            )
         }
     }
 
