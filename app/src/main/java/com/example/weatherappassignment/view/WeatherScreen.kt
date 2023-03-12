@@ -96,3 +96,19 @@ private fun PreviewWeatherScreen() {
         onSearch = {}
     )
 }
+
+@Preview
+@Composable
+private fun PreviewWeatherScreenError() {
+    WeatherScreen(
+        weatherType = null,
+        humidity = null,
+        currentCondition = null,
+        currentTemperature = null,
+        minTemperature = null,
+        maxTemperature = null,
+        isLoading = false,
+        errorMessage = "Network Error",
+        onSearch = {}
+    )
+}
