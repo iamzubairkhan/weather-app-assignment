@@ -6,4 +6,11 @@
     <string name="search">Search</string>
     <string name="enter_city_name">Enter City Name</string>
     <string name="try_again">Try again</string>
+
+    // errors
+    <string name="network_error">Network error \nPlease make sure you are connected to internet</string>
+    <string name="client_error">Invalid input \nPlease try again</string>
+    <string name="server_error">Something wrong on our end \nPlease try again</string>
+    <string name="unknown_error">Something went wrong \nPlease try again</string>
+
 </resources>

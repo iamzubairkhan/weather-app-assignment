@@ -3,6 +3,8 @@ package com.example.weatherappassignment.di
 import com.example.weatherappassignment.data.WeatherDataSource
 import com.example.weatherappassignment.data.WeatherRepository
 import com.example.weatherappassignment.data.WeatherRepositoryImpl
+import com.example.weatherappassignment.data.remote.ErrorMapper
+import com.example.weatherappassignment.data.remote.ErrorMapperImpl
 import com.example.weatherappassignment.data.remote.WeatherApiService
 import com.example.weatherappassignment.data.remote.WeatherNetworkDataSource
 import com.example.weatherappassignment.utils.BASE_URL
@@ -22,6 +24,10 @@ import kotlin.coroutines.CoroutineContext
 @InstallIn(SingletonComponent::class)
 @Module
 interface AppModule {
+
+    @Singleton
+    @Binds
+    fun bindErrorMapper(errorMapper: ErrorMapperImpl): ErrorMapper
 
     @Singleton
     @Binds
