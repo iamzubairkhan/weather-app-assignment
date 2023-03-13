@@ -3,6 +3,7 @@ package com.example.weatherappassignment.data.remote
 import com.example.weatherappassignment.BuildConfig
 import com.example.weatherappassignment.data.WeatherDataSource
 import com.example.weatherappassignment.data.model.Weather
+import com.example.weatherappassignment.data.remote.ApiException.UnknownException
 import com.example.weatherappassignment.utils.METRIC
 import com.example.weatherappassignment.view.WeatherType
 import com.google.common.truth.Truth.assertThat
@@ -11,6 +12,7 @@ import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Test
 import org.mockito.kotlin.any
+import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.whenever
 
@@ -19,10 +21,14 @@ class WeatherNetworkDataSourceTest {
 
     private val mockWeatherApiService = mock<WeatherApiService>()
     private lateinit var weatherDataSource: WeatherDataSource
+    private val fakeErrorMessage = "some exception message"
+    private val mockErrorMapper = mock<ErrorMapper> {
+        on { map(any()) } doReturn UnknownException(fakeErrorMessage)
+    }
 
     @Before
     fun setUp() {
-        weatherDataSource = WeatherNetworkDataSource(mockWeatherApiService)
+        weatherDataSource = WeatherNetworkDataSource(mockWeatherApiService, mockErrorMapper)
     }
 
     @Test
@@ -67,7 +73,7 @@ class WeatherNetworkDataSourceTest {
 
         // Then
         assertThat(result).isInstanceOf(Exception::class.java)
-        assertThat(result).hasMessageThat().isEqualTo("Something went wrong \nPlease try again")
+        assertThat(result).hasMessageThat().isEqualTo(fakeErrorMessage)
     }
 
     @Test
@@ -87,7 +93,7 @@ class WeatherNetworkDataSourceTest {
 
         // Then
         assertThat(result).isInstanceOf(Exception::class.java)
-        assertThat(result).hasMessageThat().isEqualTo("Something went wrong \nPlease try again")
+        assertThat(result).hasMessageThat().isEqualTo(fakeErrorMessage)
     }
 
     @Test
@@ -107,6 +113,6 @@ class WeatherNetworkDataSourceTest {
 
         // Then
         assertThat(result).isInstanceOf(Exception::class.java)
-        assertThat(result).hasMessageThat().isEqualTo("Something went wrong \nPlease try again")
+        assertThat(result).hasMessageThat().isEqualTo(fakeErrorMessage)
     }
 }

@@ -24,7 +24,8 @@ class WeatherNetworkDataSource @Inject constructor(
                 .map(location)
             Result.success(value = weather)
         } catch (exception: Exception) {
-            Result.failure(exception = errorMapper.map(exception))
+            val mappedError = errorMapper.map(exception)
+            Result.failure(exception = mappedError)
         }
     }
 }
