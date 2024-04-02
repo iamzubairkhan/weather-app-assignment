@@ -3,7 +3,7 @@ package com.example.weatherappassignment.data
 import com.example.weatherappassignment.data.model.Weather
 import javax.inject.Inject
 
-interface WeatherRepository {
+fun interface WeatherRepository {
     suspend fun getCurrentWeather(location: String): Result<Weather>
 }
 

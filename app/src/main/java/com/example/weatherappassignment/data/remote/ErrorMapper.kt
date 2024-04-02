@@ -10,7 +10,7 @@ import retrofit2.HttpException
 import java.io.IOException
 import javax.inject.Inject
 
-interface ErrorMapper {
+fun interface ErrorMapper {
     fun map(exception: Exception): ApiException
 }
 
@@ -18,15 +18,17 @@ class ErrorMapperImpl @Inject constructor(private val resourceProvider: Resource
     override fun map(exception: Exception): ApiException {
         return when (exception) {
             is IOException -> NetworkException(resourceProvider.getString(R.string.network_error), exception)
-            is HttpException -> {
-                when (exception.code()) {
-                    in 400..499 -> ClientException(resourceProvider.getString(R.string.client_error), exception)
-                    in 500..599 -> ServerException(resourceProvider.getString(R.string.server_error), exception)
-                    else -> UnknownException(resourceProvider.getString(R.string.unknown_error), exception)
-                }
-            }
+            is HttpException -> handleHttpException(exception, resourceProvider)
 
             else -> UnknownException(resourceProvider.getString(R.string.unknown_error), exception)
         }
+    }
+}
+
+fun handleHttpException(exception: HttpException, resourceProvider: ResourceProvider): ApiException {
+    return when (exception.code()) {
+        in 400..499 -> ClientException(resourceProvider.getString(R.string.client_error), exception)
+        in 500..599 -> ServerException(resourceProvider.getString(R.string.server_error), exception)
+        else -> UnknownException(resourceProvider.getString(R.string.unknown_error), exception)
     }
 }

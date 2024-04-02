@@ -3,7 +3,7 @@ package com.example.weatherappassignment.data.remote
 import retrofit2.http.GET
 import retrofit2.http.Query
 
-interface WeatherApiService {
+fun interface WeatherApiService {
     @GET("weather")
     suspend fun getWeatherData(
         @Query("q") location: String,
