@@ -4,6 +4,7 @@ plugins {
     id 'kotlin-kapt'
     id 'com.google.dagger.hilt.android'
     id "org.sonarqube" version "4.4.1.3373"
+    id 'jacoco'
 }
 
 android {
@@ -45,6 +46,86 @@ android {
     }
     composeOptions {
         kotlinCompilerExtensionVersion '1.4.1'
+    }
+
+    testOptions {
+        unitTests {
+            includeAndroidResources = true
+        }
+        unitTests.all {
+            jacoco {
+                includeNoLocationClasses = true
+                destinationFile = file("$project.buildDir/outputs/jacoco/jacoco.exec")
+                excludes = ['*']
+            }
+        }
+    }
+
+    // JaCoCo configuration
+    task jacocoTestReport(type: JacocoReport, dependsOn: ['testDebugUnitTest']) {
+        reports {
+            csv.enabled false
+            xml.enabled true
+            html.enabled true
+        }
+
+        def fileFilter = [
+                // data binding
+                'android/databinding/**/*.class',
+                '**/android/databinding/*Binding.class',
+                '**/android/databinding/*',
+                '**/androidx/databinding/*',
+                '**/BR.*',
+                // android
+                '**/R.class',
+                '**/R$*.class',
+                '**/BuildConfig.*',
+                '**/Manifest*.*',
+                '**/*Test*.*',
+                'android/**/*.*',
+                // kotlin
+                '**/*MapperImpl*.*',
+                '**/*$ViewInjector*.*',
+                '**/*$ViewBinder*.*',
+                '**/BuildConfig.*',
+                '**/*Component*.*',
+                '**/*BR*.*',
+                '**/Manifest*.*',
+                '**/*$Lambda$*.*',
+                '**/*Companion*.*',
+                '**/*Module*.*',
+                '**/*Dagger*.*',
+                '**/*Hilt*.*',
+                '**/*MembersInjector*.*',
+                '**/*_MembersInjector.class',
+                '**/*_Factory*.*',
+                '**/*_Provide*Factory*.*',
+                '**/*Extensions*.*',
+                // sealed and data classes
+                '**/*$Result.*',
+                '**/*$Result$*.*',
+        ]
+        def debugTree = fileTree(dir: "$project.buildDir/tmp/kotlin-classes/debug", excludes: fileFilter)
+        def mainSrc = "$project.projectDir/src/main/java"
+
+        sourceDirectories.setFrom(files([mainSrc]))
+        classDirectories.setFrom(files([debugTree]))
+        executionData.setFrom(fileTree(dir: project.buildDir, includes: [
+                "jacoco/testDebugUnitTest.exec"
+        ]))
+    }
+}
+
+
+jacoco {
+    toolVersion = "0.8.7"
+    reportsDir = file("$buildDir/customJacocoReportDir")
+}
+
+sonarqube {
+    properties {
+        property "sonar.coverage.jacoco.xmlReportPaths", "${buildDir}/customJacocoReportDir/testDebugUnitTestCoverage/testDebugUnitTestCoverage.xml"
+        property "sonar.gradle.skipCompile", "true"
     }
 }
 
